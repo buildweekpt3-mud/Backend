@@ -28,7 +28,8 @@ def initialize(request):
 def move(request):
     dirs = {"n": "north", "s": "south", "e": "east", "w": "west"}
     reverse_dirs = {"n": "south", "s": "north", "e": "west", "w": "east"}
-    player = request.user.player
+    user = request.user
+    player = Player.objects.get(user=1)
     player_id = player.id
     player_uuid = player.uuid
     data = json.loads(request.body)
