@@ -1,8 +1,8 @@
-from rest_framework import routers
-from .api import RoomViewSet, PlayerViewSet
+from django.conf.urls import url
+from . import api
 
-router = routers.DefaultRouter()
-router.register('api/rooms', RoomViewSet, 'rooms')
-router.register('api/players', PlayerViewSet, 'players')
-
-urlpatterns = router.urls
+urlpatterns = [
+    url('init', api.initialize),
+    url('move', api.move),
+    url('say', api.say),
+]
