@@ -15,7 +15,7 @@ import json
 @api_view(["GET"])
 def initialize(request):
     user = request.user
-    player = Player.objects.get(user=1)
+    player = user.player
     player_id = player.id
     uuid = player.uuid
     room = player.room()
@@ -29,7 +29,7 @@ def move(request):
     dirs = {"n": "north", "s": "south", "e": "east", "w": "west"}
     reverse_dirs = {"n": "south", "s": "north", "e": "west", "w": "east"}
     user = request.user
-    player = Player.objects.get(user=1)
+    player = user.player
     player_id = player.id
     player_uuid = player.uuid
     data = json.loads(request.body)
