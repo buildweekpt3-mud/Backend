@@ -13,6 +13,7 @@ django-rest-knox = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
 whitenoise = "*"
+django-heroku = "*"
 
 [requires]
 python_version = "3.7"
