@@ -49,9 +49,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -147,7 +147,7 @@ REST_FRAMEWORK = {
 CSRF_COOKIE_NAME = 'csrftoken'
 
 CORS_ORIGIN_WHITELIST = (
-    'localhost:3000',
+    'http://localhost:3000',
 )
 
 django_heroku.settings(locals())
