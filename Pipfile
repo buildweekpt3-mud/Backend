@@ -12,6 +12,7 @@ python-dotenv = "*"
 django-rest-knox = "*"
 gunicorn = "*"
 psycopg2-binary = "*"
+psycopg2 = "*"
 whitenoise = "*"
 django-heroku = "*"
 
