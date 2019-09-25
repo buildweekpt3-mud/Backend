@@ -77,14 +77,14 @@ def move(request):
         return JsonResponse({
             'name': player.user.username,
             'room': {
-                'id': room.id,
-                'title': room.title,
-                'description': room.description,
+                'id': nextRoom.id,
+                'title': nextRoom.title,
+                'description': nextRoom.description,
                 'directions': {
-                    'n': room.n_to,
-                    'e': room.e_to,
-                    's': room.s_to,
-                    'w': room.w_to
+                    'n': nextRoom.n_to,
+                    'e': nextRoom.e_to,
+                    's': nextRoom.s_to,
+                    'w': nextRoom.w_to
                 },
                 'items': items
             },
