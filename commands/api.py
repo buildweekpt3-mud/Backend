@@ -34,7 +34,7 @@ def initialize(request):
                 's': room.s_to,
                 'w': room.w_to
             },
-            # 'items': room.item_set.all()
+            'items': room.item_set.all()
         },
         'players': players}, safe=True)
 
