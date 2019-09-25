@@ -18,9 +18,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Room',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(default='DEFAULT TITLE', max_length=50)),
-                ('description', models.CharField(default='DEFAULT DESCRIPTION', max_length=500)),
+                ('description', models.CharField(
+                    default='DEFAULT DESCRIPTION', max_length=500)),
                 ('n_to', models.IntegerField(default=0)),
                 ('s_to', models.IntegerField(default=0)),
                 ('e_to', models.IntegerField(default=0)),
@@ -30,10 +32,24 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Player',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
                 ('currentRoom', models.IntegerField(default=0)),
                 ('uuid', models.UUIDField(default=uuid.uuid4, unique=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(
+                    on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Item',
+            fields=[
+                ('id', models.AutoField(auto_created=True,
+                                        primary_key=True, serialize=False, verbose_name='ID')),
+                ('description', models.CharField(
+                    default='DEFAULT DESCRIPTION', max_length=500)),
+                ('item_name', models.CharField(
+                    default='DEFAULT NAME', max_length=50)),
+                ('rooms', models.ManyToManyField(to='commands.Room')),
             ],
         ),
     ]

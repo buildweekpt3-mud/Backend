@@ -35,6 +35,10 @@ class Room(models.Model):
                 return
             self.save()
 
+    def addItem(self, item):
+        item.rooms.add(self)
+        item.save()
+
     def playerNames(self, currentPlayerID):
         return [p.user.username for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
 
@@ -58,6 +62,16 @@ class Player(models.Model):
         except Room.DoesNotExist:
             self.initialize()
             return self.room()
+
+
+class Item(models.Model):
+    item_name = models.CharField(max_length=50, default="DEFAULT NAME")
+    description = models.CharField(
+        max_length=500, default="DEFAULT DESCRIPTION")
+    rooms = models.ManyToManyField(Room)
+
+    def initialize(self):
+        self.save()
 
 
 @receiver(post_save, sender=User)

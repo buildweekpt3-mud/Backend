@@ -20,6 +20,7 @@ def initialize(request):
     uuid = player.uuid
     room = player.room()
     players = room.playerNames(player_id)
+    print(room.item_set)
     return JsonResponse({
         'uuid': uuid,
         'name': player.user.username,
@@ -27,10 +28,13 @@ def initialize(request):
             'id': room.id,
             'title': room.title,
             'description': room.description,
-            'n_to': room.n_to,
-            'e_to': room.e_to,
-            's_to': room.s_to,
-            'w_to': room.w_to,
+            'directions': {
+                'n': room.n_to,
+                'e': room.e_to,
+                's': room.s_to,
+                'w': room.w_to
+            },
+            # 'items': room.item_set.all()
         },
         'players': players}, safe=True)
 
