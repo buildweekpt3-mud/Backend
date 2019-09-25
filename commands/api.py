@@ -20,7 +20,8 @@ def initialize(request):
     uuid = player.uuid
     room = player.room()
     players = room.playerNames(player_id)
-    print(room.item_set)
+    items = [{"id": x.id, "name": x.item_name, "description": x.description}
+             for x in room.item_set.all()]
     return JsonResponse({
         'uuid': uuid,
         'name': player.user.username,
@@ -34,7 +35,7 @@ def initialize(request):
                 's': room.s_to,
                 'w': room.w_to
             },
-            'items': room.item_set.all()
+            'items': items
         },
         'players': players}, safe=True)
 
