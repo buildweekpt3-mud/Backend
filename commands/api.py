@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 # from pusher import Pusher
 from django.http import JsonResponse
 from django.contrib.auth.models import User
-from .models import Room, Player
+from .models import Room, Player, Item
 from rest_framework.decorators import api_view
 import json
 
@@ -122,19 +122,25 @@ def take(request):
     player_id = player.id
     player_uuid = player.uuid
     data = json.loads(request.body)
-    item = data['item']
+    item_id = int(data['item'])
     room = player.room()
+    inventory = room.item_set.all()
     items = [{"id": x.id, "name": x.item_name, "description": x.description}
-             for x in room.item_set.all()]
-    item_id = None
+             for x in player.item_set.all()]
+    error = ""
 
-    if item_id is not None and item_id > 0:
-        player.take(Item.objects.get(pk=item_id).first())
-        player.save()
-        items = [{"id": x.id, "name": x.item_name, "description": x.description}
-                 for x in player.item_set.all()]
+    if inventory.count() > 0:
+        if item_id is not None and item_id > 0:
+            player.take(Item.objects.get(pk=item_id))
+            player.save()
+            items = [{"id": x.id, "name": x.item_name, "description": x.description}
+                     for x in player.item_set.all()]
+        else:
+            error = 'That item does not exist'
+    else:
+        error = 'That item is not in this room'
 
-    return JsonResponse({'items': items}, safe=True)
+    return JsonResponse({'items': items, 'error_msg': error}, safe=True)
 
 
 # @csrf_exempt
@@ -145,19 +151,24 @@ def drop(request):
     player_id = player.id
     player_uuid = player.uuid
     data = json.loads(request.body)
-    item = data['item']
+    item_id = int(data['item'])
     room = player.room()
     items = [{"id": x.id, "name": x.item_name, "description": x.description}
-             for x in room.item_set.all()]
-    item_id = None
+             for x in player.item_set.all()]
+    error = ""
 
-    if item_id is not None and item_id > 0:
-        player.drop(Item.objects.get(pk=item_id).first())
-        player.save()
-        items = [{"id": x.id, "name": x.item_name, "description": x.description}
-                 for x in player.item_set.all()]
+    if len(items) > 0:
+        if item_id is not None and item_id > 0:
+            player.drop(Item.objects.get(pk=item_id))
+            player.save()
+            items = [{"id": x.id, "name": x.item_name, "description": x.description}
+                     for x in player.item_set.all()]
+        else:
+            error = 'That item does not exist'
+    else:
+        error = 'That item is not in your inventory'
 
-    return JsonResponse({'items': items}, safe=True)
+    return JsonResponse({'items': items, 'error_msg': error}, safe=True)
 
 
 @csrf_exempt
