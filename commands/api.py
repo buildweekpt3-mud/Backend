@@ -114,6 +114,52 @@ def move(request):
         }, safe=True)
 
 
+# @csrf_exempt
+@api_view(["POST"])
+def take(request):
+    user = request.user
+    player = user.player
+    player_id = player.id
+    player_uuid = player.uuid
+    data = json.loads(request.body)
+    item = data['item']
+    room = player.room()
+    items = [{"id": x.id, "name": x.item_name, "description": x.description}
+             for x in room.item_set.all()]
+    item_id = None
+
+    if item_id is not None and item_id > 0:
+        player.take(Item.objects.get(pk=item_id).first())
+        player.save()
+        items = [{"id": x.id, "name": x.item_name, "description": x.description}
+                 for x in player.item_set.all()]
+
+    return JsonResponse({'items': items}, safe=True)
+
+
+# @csrf_exempt
+@api_view(["POST"])
+def drop(request):
+    user = request.user
+    player = user.player
+    player_id = player.id
+    player_uuid = player.uuid
+    data = json.loads(request.body)
+    item = data['item']
+    room = player.room()
+    items = [{"id": x.id, "name": x.item_name, "description": x.description}
+             for x in room.item_set.all()]
+    item_id = None
+
+    if item_id is not None and item_id > 0:
+        player.drop(Item.objects.get(pk=item_id).first())
+        player.save()
+        items = [{"id": x.id, "name": x.item_name, "description": x.description}
+                 for x in player.item_set.all()]
+
+    return JsonResponse({'items': items}, safe=True)
+
+
 @csrf_exempt
 @api_view(["POST"])
 def say(request):

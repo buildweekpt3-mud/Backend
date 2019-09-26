@@ -39,6 +39,10 @@ class Room(models.Model):
         item.rooms.add(self)
         item.save()
 
+    def removeItem(self, item):
+        item.rooms.remove(self)
+        item.save()
+
     def playerNames(self, currentPlayerID):
         return [p.user.username for p in Player.objects.filter(currentRoom=self.id) if p.id != int(currentPlayerID)]
 
@@ -56,6 +60,16 @@ class Player(models.Model):
             self.currentRoom = Room.objects.first().id
             self.save()
 
+    def take(self, item):
+        item.players.add(self)
+        self.room().removeItem(item)
+        item.save()
+
+    def drop(self, item):
+        item.players.remove(self)
+        self.room().addItem(item)
+        item.save()
+
     def room(self):
         try:
             return Room.objects.get(id=self.currentRoom)
@@ -69,6 +83,7 @@ class Item(models.Model):
     description = models.CharField(
         max_length=500, default="DEFAULT DESCRIPTION")
     rooms = models.ManyToManyField(Room)
+    players = models.ManyToManyField(Player)
 
     def initialize(self):
         self.save()
