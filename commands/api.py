@@ -25,6 +25,7 @@ def initialize(request):
     return JsonResponse({
         'uuid': uuid,
         'name': player.user.username,
+        'inventory': [{"id": x.id, "name": x.item_name, "description": x.description} for x in player.item_set.all()],
         'room': {
             'id': room.id,
             'title': room.title,
@@ -78,6 +79,7 @@ def move(request):
         #     pusher.trigger(f'p-channel-{p_uuid}', u'broadcast', {'message':f'{player.user.username} has entered from the {reverse_dirs[direction]}.'})
         return JsonResponse({
             'name': player.user.username,
+            'inventory': [{"id": x.id, "name": x.item_name, "description": x.description} for x in player.item_set.all()],
             'room': {
                 'id': nextRoom.id,
                 'title': nextRoom.title,
@@ -97,6 +99,7 @@ def move(request):
         players = room.playerNames(player_id)
         return JsonResponse({
             'name': player.user.username,
+            'inventory': [{"id": x.id, "name": x.item_name, "description": x.description} for x in player.item_set.all()],
             'room': {
                 'id': room.id,
                 'title': room.title,
