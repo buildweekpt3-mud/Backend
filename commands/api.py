@@ -5,10 +5,19 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from .models import Room, Player, Item
 from rest_framework.decorators import api_view
+from util.generate_world import createWorld
 import json
 
 # instantiate pusher
 # pusher = Pusher(app_id=config('PUSHER_APP_ID'), key=config('PUSHER_KEY'), secret=config('PUSHER_SECRET'), cluster=config('PUSHER_CLUSTER'))
+
+
+@csrf_exempt
+@api_view(["GET"])
+def generate_world(request):
+    print("Create world")
+    createWorld()
+    return JsonResponse({}, safe=True)
 
 
 @csrf_exempt
