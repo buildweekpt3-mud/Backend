@@ -1,7 +1,17 @@
 from django.contrib.auth.models import User
-from commands.models import Player, Room
+from commands.models import Player, Room, Item
 
+from django.db.models import Max
 import random
+
+
+def get_random_item():
+    max_id = Item.objects.all().aggregate(max_id=Max("id"))['max_id']
+    while True:
+        pk = random.randint(1, max_id)
+        item = Item.objects.filter(pk=pk).first()
+        if item:
+            return item
 
 
 def createWorld():
@@ -45,7 +55,7 @@ def createWorld():
     startx, starty, distance = 1, 1, 1
 
     # Index to read data from dataFromFile
-    dataFileIndex = 1
+    dataFileMaxIndex = len(dataFromFile)
     for i in range(0, 10):  # For each row
         # We are in row number i. So, y cordinate is fixed at 100 + i*distance
         # now we will go through each column of this ith row, and set x co-ordinates and create room
@@ -55,12 +65,16 @@ def createWorld():
             x = startx + j * distance
 
             # We have x,y co-oridinate to create a room
-
-            print("Date from file", (dataFromFile[dataFileIndex]))
+            rand_room_id = random.randint(1, dataFileMaxIndex)
+            print("Date from file", (dataFromFile[rand_room_id]))
             # Create room based on title, description, x and y co-ordinates
-            room = Room(title=dataFromFile[dataFileIndex][0],
-                        description=dataFromFile[dataFileIndex][1], x=x, y=y)
+            room = Room(title=dataFromFile[rand_room_id][0],
+                        description=dataFromFile[rand_room_id][1], x=x, y=y)
             room.save()
+            if random.randint(1, 10) in (1, 2, 3, 4, 5, 6):  # Skip 40% of items
+                item = get_random_item()
+                room.addItem(item)
+                room.save()
             dRooms[(x, y)] = room
 
             # Connect this room to its neghbour
@@ -96,8 +110,6 @@ def createWorld():
                 else:
                     print("Skip adding west")
                     totalWestSkipped += 1
-
-            dataFileIndex += 1
 
     print("Rooms : ", dRooms)
     for cord, room in dRooms.items():

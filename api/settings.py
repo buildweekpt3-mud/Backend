@@ -145,6 +145,7 @@ CSRF_COOKIE_NAME = 'csrftoken'
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',
+    'https://react-dungeon.netlify.com'
 )
 
 django_heroku.settings(locals())
