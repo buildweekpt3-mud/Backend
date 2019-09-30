@@ -66,14 +66,14 @@ def createWorld():
             # Connect this room to its neghbour
 
             # First look north room, which is x, y + 25, but it should exist
-            # if y + 25 <= 350:
-            #     if (x, y + 25) in dRooms:
-            #         northRoom = dRooms[(x, y + 25)]
-            #         room.n_to = northRoom
-            #         northRoom.s_to = room
+            if y + distance <= 350:
+                if (x, y + distance) in dRooms:
+                    northRoom = dRooms[(x, y + 25)]
+                    room.n_to = northRoom
+                    northRoom.s_to = room
 
             # Look south which is 100,100, south is x, y-25
-            if y-distance >= starty:
+            if y - distance >= starty:
                 if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of souths
                     southRoom = dRooms[(x, y - distance)]
                     room.connectRooms(southRoom, "s")
@@ -81,15 +81,15 @@ def createWorld():
                     print("Skip adding south")
                     totalSouthSkipped += 1
 
-            # # Look each which is x+25,y and should exist
-            # if x +25 <= 350:
-            #     if (x - 35, y) in dRooms:
-            #         westRoom = dRooms[(x - 35, y)]
-            #     room.w_to = westRoom
-            #     westRoom.w_to = room
+            # Look each which is x+25,y and should exist
+            if x + distance <= 350:
+                if (x - distance, y) in dRooms:
+                    westRoom = dRooms[(x - distance, y)]
+                room.w_to = westRoom
+                westRoom.w_to = room
 
             # Look west which is x+25,y and should exist
-            if x-distance >= startx:
+            if x - distance >= startx:
                 if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of west
                     westRoom = dRooms[(x-distance, y)]
                     room.connectRooms(westRoom, "w")
@@ -107,5 +107,5 @@ def createWorld():
 
     players = Player.objects.all()
     for p in players:
-        p.currentRoom = dRooms[0].id
+        p.currentRoom = dRooms[(1, 1)].id
         p.save()
