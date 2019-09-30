@@ -65,20 +65,20 @@ def createWorld():
 
             # Connect this room to its neghbour
 
-            # First look north room, which is x, y + distance, but it should exist
-            if (x, y - distance) in dRooms:
-                northRoom = dRooms[(x, y + distance)]
-                room.connectRooms(northRoom, "n")
-                northRoom.connectRooms(room, "s")
+            # First look south room, which is x, y + distance, but it should exist
+            if (x, y + distance) in dRooms:
+                southRoom = dRooms[(x, y + distance)]
+                room.connectRooms(southRoom, "s")
+                southRoom.connectRooms(room, "n")
 
-            # Look south which is 100,100, south is x, y - distance
+            # Look north which is 100,100, north is x, y - distance
             if y - distance >= starty:
-                if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of souths
-                    southRoom = dRooms[(x, y - distance)]
-                    room.connectRooms(southRoom, "s")
+                if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of norths
+                    northRoom = dRooms[(x, y - distance)]
+                    room.connectRooms(northRoom, "n")
                 else:
                     print("Skip adding south")
-                    totalSouthSkipped += 1
+                    totalNorthSkipped += 1
 
             # Look east which is x + distance,y and should exist
             if (x - distance, y) in dRooms:
