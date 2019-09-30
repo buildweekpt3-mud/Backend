@@ -22,6 +22,18 @@ def generate_world(request):
 
 @csrf_exempt
 @api_view(["GET"])
+def get_map(request):
+    world = [{
+        room.id: [
+            {"x": room.x, "y": room.y},
+            {"n": room.n_to, "e": room.e_to, "s": room.s_to, "w": room.w_to}
+        ]
+        for room in Room.objects.all()}]
+    return JsonResponse(*world, safe=True)
+
+
+@csrf_exempt
+@api_view(["GET"])
 def initialize(request):
     user = request.user
     player = user.player

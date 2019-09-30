@@ -30,7 +30,7 @@ def createWorld():
     dRooms = {}
 
     # Counters to track how many links were skipped
-    totalSouthSkipped = 0
+    totalNorthSkipped = 0
     totalWestSkipped = 0
 
     # We are going to place rooms on co-odrinates starting from (100,100)
@@ -76,21 +76,23 @@ def createWorld():
                 if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of norths
                     northRoom = dRooms[(x, y - distance)]
                     room.connectRooms(northRoom, "n")
+                    northRoom.connectRooms(room, "s")
                 else:
                     print("Skip adding south")
                     totalNorthSkipped += 1
 
             # Look east which is x + distance,y and should exist
-            if (x - distance, y) in dRooms:
-                westRoom = dRooms[(x - distance, y)]
-                room.connectRooms(westRoom, "w")
-                westRoom.connectRooms(room, "e")
+            if (x + distance, y) in dRooms:
+                eastRoom = dRooms[(x + distance, y)]
+                room.connectRooms(eastRoom, "e")
+                eastRoom.connectRooms(room, "w")
 
             # Look west which is x + distance,y and should exist
             if x - distance >= startx:
                 if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of west
                     westRoom = dRooms[(x - distance, y)]
                     room.connectRooms(westRoom, "w")
+                    westRoom.connectRooms(room, "e")
                 else:
                     print("Skip adding west")
                     totalWestSkipped += 1
@@ -101,7 +103,7 @@ def createWorld():
     for cord, room in dRooms.items():
         print(cord, ":", room)
 
-    print("Total Skipped ", totalSouthSkipped, totalWestSkipped)
+    print("Total Skipped ", totalNorthSkipped, totalWestSkipped)
 
     players = Player.objects.all()
     for p in players:
