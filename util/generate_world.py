@@ -84,7 +84,7 @@ def createWorld():
             if (x - distance, y) in dRooms:
                 westRoom = dRooms[(x - distance, y)]
                 room.connectRooms(westRoom, "w")
-                northRoom.connectRooms(room, "e")
+                westRoom.connectRooms(room, "e")
 
             # Look west which is x + distance,y and should exist
             if x - distance >= startx:
