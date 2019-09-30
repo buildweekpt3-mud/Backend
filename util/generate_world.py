@@ -34,11 +34,11 @@ def createWorld():
     totalWestSkipped = 0
 
     # We are going to place rooms on co-odrinates starting from (100,100)
-    # We will go right and up by 25 points.
-    # So, first room coordinate is (100,100). Next room in same row will be (125, 100), (150, 100) and so on. Last room
+    # We will go right and up by distance points.
+    # So, first room coordinate is (100,100). Next room in same row will be (1distance, 100), (150, 100) and so on. Last room
     # in this row will be (350,100)
-    # After being done this row, we move to next row above this, which has first room at (100, 125). Its next room will
-    # be (125, 125), (150, 125) and so on.
+    # After being done this row, we move to next row above this, which has first room at (100, 1distance). Its next room will
+    # be (1distance, 1distance), (150, 1distance) and so on.
     # This will we keep going up until last row, whose first room will be (100, 350).
     #
 
@@ -47,12 +47,12 @@ def createWorld():
     # Index to read data from dataFromFile
     dataFileIndex = 1
     for i in range(0, 10):  # For each row
-        # We are in row number i. So, y cordinate is fixed at 100 + i*25
+        # We are in row number i. So, y cordinate is fixed at 100 + i*distance
         # now we will go through each column of this ith row, and set x co-ordinates and create room
-        y = starty + i*distance
+        y = starty + i * distance
         for j in range(0, 10):
             # X, y co-ordinates of room
-            x = startx + j*distance
+            x = startx + j * distance
 
             # We have x,y co-oridinate to create a room
 
@@ -65,14 +65,13 @@ def createWorld():
 
             # Connect this room to its neghbour
 
-            # First look north room, which is x, y + 25, but it should exist
-            if y + distance <= 350:
-                if (x, y + distance) in dRooms:
-                    northRoom = dRooms[(x, y + 25)]
-                    room.n_to = northRoom
-                    northRoom.s_to = room
+            # First look north room, which is x, y + distance, but it should exist
+            if (x, y - distance) in dRooms:
+                northRoom = dRooms[(x, y + distance)]
+                room.connectRooms(northRoom, "n")
+                northRoom.connectRooms(room, "s")
 
-            # Look south which is 100,100, south is x, y-25
+            # Look south which is 100,100, south is x, y - distance
             if y - distance >= starty:
                 if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of souths
                     southRoom = dRooms[(x, y - distance)]
@@ -81,17 +80,16 @@ def createWorld():
                     print("Skip adding south")
                     totalSouthSkipped += 1
 
-            # Look each which is x+25,y and should exist
-            if x + distance <= 350:
-                if (x - distance, y) in dRooms:
-                    westRoom = dRooms[(x - distance, y)]
-                room.w_to = westRoom
-                westRoom.w_to = room
+            # Look east which is x + distance,y and should exist
+            if (x - distance, y) in dRooms:
+                westRoom = dRooms[(x - distance, y)]
+                room.connectRooms(westRoom, "w")
+                northRoom.connectRooms(room, "e")
 
-            # Look west which is x+25,y and should exist
+            # Look west which is x + distance,y and should exist
             if x - distance >= startx:
                 if random.randint(1, 10) in (1, 2, 3, 4, 5, 6, 7, 8):  # Skip 20% of west
-                    westRoom = dRooms[(x-distance, y)]
+                    westRoom = dRooms[(x - distance, y)]
                     room.connectRooms(westRoom, "w")
                 else:
                     print("Skip adding west")
