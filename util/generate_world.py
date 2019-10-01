@@ -19,9 +19,6 @@ def createWorld():
     print("create_world called")
     Room.objects.all().delete()
 
-    # Read data from file and keep in dictonary
-    # Dictionary key : running number, starting from 1
-    # Dictionary value : tuple of title and description read from data fle
     i = 1
     dataFromFile = {}
     with open("util/data") as f:
@@ -33,24 +30,11 @@ def createWorld():
             dataFromFile[i] = (title, description)
             i += 1
 
-    #
-    # We will create a dictionary of rooms
-    # dRoooms key (x,y) cordinates of room
-    # dRooms value is the Room object at coordinates (x,y)
     dRooms = {}
 
     # Counters to track how many links were skipped
     totalNorthSkipped = 0
     totalWestSkipped = 0
-
-    # We are going to place rooms on co-odrinates starting from (100,100)
-    # We will go right and up by distance points.
-    # So, first room coordinate is (100,100). Next room in same row will be (1distance, 100), (150, 100) and so on. Last room
-    # in this row will be (350,100)
-    # After being done this row, we move to next row above this, which has first room at (100, 1distance). Its next room will
-    # be (1distance, 1distance), (150, 1distance) and so on.
-    # This will we keep going up until last row, whose first room will be (100, 350).
-    #
 
     startx, starty, distance = 1, 1, 1
 
@@ -67,6 +51,7 @@ def createWorld():
             # We have x,y co-oridinate to create a room
             rand_room_id = random.randint(1, dataFileMaxIndex)
             print("Date from file", (dataFromFile[rand_room_id]))
+
             # Create room based on title, description, x and y co-ordinates
             room = Room(title=dataFromFile[rand_room_id][0],
                         description=dataFromFile[rand_room_id][1], x=x, y=y)
@@ -77,7 +62,7 @@ def createWorld():
                 room.save()
             dRooms[(x, y)] = room
 
-            # Connect this room to its neghbour
+            # Connect rooms
 
             # First look south room, which is x, y + distance, but it should exist
             if (x, y + distance) in dRooms:
