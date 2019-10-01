@@ -50,7 +50,6 @@ def createWorld():
 
             # We have x,y co-oridinate to create a room
             rand_room_id = random.randint(1, dataFileMaxIndex)
-            print("Date from file", (dataFromFile[rand_room_id]))
 
             # Create room based on title, description, x and y co-ordinates
             room = Room(title=dataFromFile[rand_room_id][0],
@@ -77,7 +76,6 @@ def createWorld():
                     room.connectRooms(northRoom, "n")
                     northRoom.connectRooms(room, "s")
                 else:
-                    print("Skip adding south")
                     totalNorthSkipped += 1
 
             # Look east which is x + distance,y and should exist
@@ -93,14 +91,7 @@ def createWorld():
                     room.connectRooms(westRoom, "w")
                     westRoom.connectRooms(room, "e")
                 else:
-                    print("Skip adding west")
                     totalWestSkipped += 1
-
-    print("Rooms : ", dRooms)
-    for cord, room in dRooms.items():
-        print(cord, ":", room)
-
-    print("Total Skipped ", totalNorthSkipped, totalWestSkipped)
 
     players = Player.objects.all()
     for p in players:
